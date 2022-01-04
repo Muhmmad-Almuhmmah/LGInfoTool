@@ -4,7 +4,8 @@ Simple LG Info Tool Read Info Diag /Download Mode
 -  Android Info
 -  SW Version 
 -  SPC [Diag Mode]
-
+-  switch to download mode
+-  switch to normal mode
 ## Tests Q710MS
 
 ![Pic](https://github.com/Muhmmad-Almuhmmah/LGInfoTool/raw/main/images/0.png)
