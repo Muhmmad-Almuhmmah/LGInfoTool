@@ -27,11 +27,6 @@ SearchPorts::~SearchPorts()
     qDebug() <<"distructor searchports";
 }
 
-void SearchPorts::SetMode(SearchPorts::SearchMode mode)
-{
-    this->mode=mode;
-}
-
 int SearchPorts::getTimeout() const
 {
     return timeout;
@@ -101,40 +96,22 @@ void SearchPorts::run()
         //        qDebug() <<"1";
         QThread::msleep(1500);
         auto serialPortInfos = QSerialPortInfo::availablePorts();
-        if(mode==DEFAUALT_CASE){
-            for(const QSerialPortInfo &serialPortInfo : serialPortInfos){
-                //                if(state) break;
-                if(isStop) return;
-                desc = serialPortInfo.description().trimmed();
-                manufacturer = serialPortInfo.manufacturer().trimmed();
-                serialNumber = serialPortInfo.serialNumber().trimmed();
-                str=QString(!desc.isEmpty() ? desc : blankString).append(" ("+serialPortInfo.portName()+")");
-                portNum=serialPortInfo.portName().toLower().remove("com");
-                desc=desc.toLower();
-                //            qDebug() <<"str"<<str;
-                qDebug() <<"desc"<<desc;
-                QThread::msleep(30);
-                if(CustomVID!=0x0 and CustomPID !=0x0){
-                    qDebug() <<"by VID,PID";
-                    if(serialPortInfo.hasProductIdentifier() and serialPortInfo.hasVendorIdentifier()){
-                        if(serialPortInfo.productIdentifier()==CustomVID and serialPortInfo.productIdentifier()==CustomPID){
-                            if(checkOpenPort){
-                                if(!TryOpen(portNum.toInt()))
-                                    continue;
-                            }
-                            if(isStop) return;
-                            emit UpdateCmb(str,portNum);
-                            state=true;
-                        }
-                    }
-                }
-
-                QMap<QString, QString>::const_iterator i = sports.constBegin();
-                while (i != sports.constEnd()) {
-                    if(isStop) return;
-                    //if(state) break;
-                    qDebug()<< i.key() << ": " << i.value() << Qt::endl;
-                    if(desc.toLower().contains(i.key().toLower()) and desc.toLower().contains(i.value().toLower())){
+        for(const QSerialPortInfo &serialPortInfo : serialPortInfos){
+            //                if(state) break;
+            if(isStop) return;
+            desc = serialPortInfo.description().trimmed();
+            manufacturer = serialPortInfo.manufacturer().trimmed();
+            serialNumber = serialPortInfo.serialNumber().trimmed();
+            str=QString(!desc.isEmpty() ? desc : blankString).append(" ("+serialPortInfo.portName()+")");
+            portNum=serialPortInfo.portName().toLower().remove("com");
+            desc=desc.toLower();
+            //            qDebug() <<"str"<<str;
+            qDebug() <<"desc"<<desc;
+            QThread::msleep(30);
+            if(CustomVID!=0x0 and CustomPID !=0x0){
+                qDebug() <<"by VID,PID";
+                if(serialPortInfo.hasProductIdentifier() and serialPortInfo.hasVendorIdentifier()){
+                    if(serialPortInfo.productIdentifier()==CustomVID and serialPortInfo.productIdentifier()==CustomPID){
                         if(checkOpenPort){
                             if(!TryOpen(portNum.toInt()))
                                 continue;
@@ -143,21 +120,15 @@ void SearchPorts::run()
                         emit UpdateCmb(str,portNum);
                         state=true;
                     }
-                    ++i;
                 }
             }
-        }else if(mode==UPGRADE_CASE){
-            //qDebug()<<"Method2"<< BrandHisi << ": " << typePortHisi << Qt::endl;
-            for(const QSerialPortInfo &serialPortInfo : serialPortInfos){
-                //if(state) break;
+
+            QMap<QString, QString>::const_iterator i = sports.constBegin();
+            while (i != sports.constEnd()) {
                 if(isStop) return;
-                desc = serialPortInfo.description().trimmed();
-                manufacturer = serialPortInfo.manufacturer().trimmed();
-                serialNumber = serialPortInfo.serialNumber().trimmed();
-                str=QString(!desc.isEmpty() ? desc : blankString).append(" ("+serialPortInfo.portName()+")");
-                portNum=serialPortInfo.portName().toLower().remove("com");
-                desc=desc.toLower();
-                if(desc.toLower().contains(BrandHisi.toLower()) and desc.toLower().contains(typePortHisi.toLower())){
+                //if(state) break;
+                qDebug()<< i.key() << ": " << i.value() << Qt::endl;
+                if(desc.toLower().contains(i.key().toLower()) and desc.toLower().contains(i.value().toLower())){
                     if(checkOpenPort){
                         if(!TryOpen(portNum.toInt()))
                             continue;
@@ -166,26 +137,7 @@ void SearchPorts::run()
                     emit UpdateCmb(str,portNum);
                     state=true;
                 }
-            }
-            //qDebug()<<"Method2"<< BrandQlm << ": " << typePortQlm << Qt::endl;
-            for(const QSerialPortInfo &serialPortInfo : serialPortInfos){
-                //if(state) break;
-                if(isStop) return;
-                desc = serialPortInfo.description().trimmed();
-                manufacturer = serialPortInfo.manufacturer().trimmed();
-                serialNumber = serialPortInfo.serialNumber().trimmed();
-                str=QString(!desc.isEmpty() ? desc : blankString).append(" ("+serialPortInfo.portName()+")");
-                portNum=serialPortInfo.portName().toLower().remove("com");
-                desc=desc.toLower();
-                if(desc.toLower().contains(BrandQlm.toLower()) and desc.toLower().contains(typePortQlm.toLower())){
-                    if(checkOpenPort){
-                        if(!TryOpen(portNum.toInt()))
-                            continue;
-                    }
-                    if(isStop) return;
-                    emit UpdateCmb(str,portNum);
-                    state=true;
-                }
+                ++i;
             }
         }
     }

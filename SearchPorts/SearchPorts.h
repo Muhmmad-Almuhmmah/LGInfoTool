@@ -9,11 +9,6 @@
 #include <windows.h>
 #include <QSharedPointer>
 #include <QDebug>
-#define BrandHisi    QString("DBAdapter")
-#define typePortHisi QString("Interface")
-#define BrandQlm     QString("android")
-#define typePortQlm  QString("pcui")
-
 class SearchPorts : public QThread
 {
     Q_OBJECT
@@ -27,12 +22,6 @@ public:
     SearchPorts(const QString &PortBrand,const QString &PortName);
     SearchPorts(const QString &PortBrand,const QString &PortName,const QString &PortBrand2,const QString &PortName2);
     ~SearchPorts();
-    typedef enum:int{
-        DEFAUALT_CASE,UPGRADE_CASE
-    }SearchMode;
-    SearchMode mode=DEFAUALT_CASE;
-    Q_ENUM(SearchMode)
-    void SetMode(SearchMode mode=DEFAUALT_CASE);
     void InsertPortSearch(QString arg1,QString arg2=QString());
     bool StartThread();
     void SetCheckOpenPort(bool state);

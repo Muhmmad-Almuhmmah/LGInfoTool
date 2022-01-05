@@ -26,7 +26,7 @@ enum LGE_METHODS{
 #define LAF_FILL(len)                           QByteArray().fill('0',len*2)
 #define LAF_MAGIC(cmd_laf)                      0xFFFFFFFF^cmd_laf
 
-#define HDR_MSG QString("<a href=\"https://github.com/Muhmmad-Almuhmmah/\" target=\"_blank\">Githup</a> <a href=\"https://www.facebook.com/X.Dev.Ye\" target=\"_blank\">Facebook</a>\t|\t%1")
+#define HDR_MSG QString("<a href=\"https://github.com/Muhmmad-Almuhmmah/\" target=\"_blank\">GitHup</a> <a href=\"https://www.facebook.com/X.Dev.Ye\" target=\"_blank\">Facebook</a>\t|\t%1")
 
 class MW : public QMainWindow
 {
